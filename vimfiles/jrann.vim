@@ -1,9 +1,13 @@
 " To use:
+"
+" git clone https://github.com/JeremyRann/jrann-vim.git ~/.vim
+" or 
 " cd ~/
-" mkdir -p .vim/{bundle,colors,vimfiles}
-" git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim
+" mkdir -p .vim/{colors,vimfiles}
 " Copy this script to .vim/vimfiles/jrann.vim
 " Copy jrann-color.vim to .vim/colors
+"
+" git clone https://github.com/VundleVim/Vundle.vim.git .vim/bundle/Vundle.vim
 " (TODO: create Vundle for the colors)
 " Add one line to .vimrc:
 " source ~/.vim/vimfiles/jrann.vim
