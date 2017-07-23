@@ -181,11 +181,13 @@ endif
 " Set highlight colors/formatting
 hi CursorLine term=bold cterm=none ctermbg=17 guibg=Grey20
 
-"Always show status bar on bottom
+" Always show status bar on bottom
 set laststatus=2
 
-"Disable automatic comments and word wrap
+" Disable automatic comments and word wrap
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o formatoptions-=t
+" Read handlebars files (as if they're html)
+autocmd BufRead,BufNewFile *.hbs setfiletype html
 :set ic
 :set is
 
