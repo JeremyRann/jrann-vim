@@ -274,5 +274,5 @@ map <F4> :b#<cr>
 " old file and writes a new one; yes makes a copy of the original and overwrites it.
 set backupcopy=yes
 " Unset ctrl+F as find in gvim
-unset <C-F>
+unmap <C-F>
 
