@@ -273,4 +273,6 @@ map <F4> :b#<cr>
 " By default, backupcopy=auto, which tells vim to do what it feels like. The other options are yes and no, where no renames the
 " old file and writes a new one; yes makes a copy of the original and overwrites it.
 set backupcopy=yes
+" Unset ctrl+F as find in gvim
+unset <C-F>
 
