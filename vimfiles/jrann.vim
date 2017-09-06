@@ -257,6 +257,8 @@ map <leader>E :cd %:p:h<cr>:NERDTree<cr>
 map <leader>q :Bdelete<cr>
 " Disregard changes, close buffer, and keep split windows (don't automatically send cr to allow confirmation)
 map <leader>Q :Bdelete!
+" Map \f to "Fix .NERDTreeBookmarks (hideous hack for bug I don't feel like reporting or fixing myself)
+map <leader>f map <leader>f :%s/ \/c/ c:/g<CR>:%s/\//\\/g<CR>
 " Disable auto-indent. There is no logical enable auto-indent since I don't know the original state.
 " With some work, you could figure it out beforehand with something like :verbose set ai? cin? cink? cino? si? inde? indk?
 " but I don't know the options very well (see http://vim.wikia.com/wiki/How_to_stop_auto_indenting)
