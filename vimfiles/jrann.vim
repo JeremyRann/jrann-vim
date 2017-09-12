@@ -271,6 +271,8 @@ map <F12> :bn<cr>
 map <F2> :bf<cr>
 map <F3> :bl<cr>
 map <F4> :b#<cr>
+" Shift+Tab to unindent (curious that this isn't a default)
+inoremap <S-Tab> <C-d>
 " Changes how vim writes files; in my case, webpack's file watcher failed without this, but generally the behaviour is funky.
 " By default, backupcopy=auto, which tells vim to do what it feels like. The other options are yes and no, where no renames the
 " old file and writes a new one; yes makes a copy of the original and overwrites it.
