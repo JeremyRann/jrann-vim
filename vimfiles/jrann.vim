@@ -17,6 +17,11 @@
 " let g:MYCONFHomeDir = globpath("~/", "newvimhome")
 " Another option is to enable xclip integration:
 " let g:MYCONFXClipIntegration=1
+" A great option for systems using Mintty or Putty or something is improved mouse support:
+" if !has("gui_running")
+"    set ttymouse=xterm2
+" endif
+" (TODO: figure out way to determine if that should be set dynamically)
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
