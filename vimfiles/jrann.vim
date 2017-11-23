@@ -249,8 +249,8 @@ if g:MYCONFXClipIntegration
     nmap <leader>c :w !xclip<cr><cr>
     vmap <leader>c y:call system("xclip", @")<cr>
 else
-    nmap <leader>c ggVG"*y
-    vmap <leader>c "*y
+    nmap <leader>c :%y +<cr>
+    vmap <leader>c "+y
 endif
 " New buffer
 map <leader>n :enew<cr>
