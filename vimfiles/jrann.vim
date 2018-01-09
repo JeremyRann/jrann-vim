@@ -175,10 +175,11 @@ hi Todo gui=none
 hi StatusLine gui=none
 
 " Go ahead and wrap by default for diffs, and begin at the start of the buffer
-if &diff
-    autocmd FilterWritePre * execute 'windo set wrap'
-    autocmd FilterWritePre * execute 'call feedkeys("gg")'
-endif
+" (note this causes problems on Cygwin; haven't taken time to debug yet)
+"if &diff
+    "autocmd FilterWritePre * execute 'windo set wrap'
+    "autocmd FilterWritePre * execute 'call feedkeys("gg")'
+"endif
 
 " Set to highlight on insert mode and not otherwise
 :autocmd InsertEnter * set cul
