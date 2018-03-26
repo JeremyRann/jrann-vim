@@ -23,6 +23,7 @@
 " endif
 " (TODO: figure out way to determine if that should be set dynamically)
 set nocompatible              " be iMproved, required
+set nomodeline
 filetype off                  " required
 
 if !exists("g:MYCONFHomeDir")
