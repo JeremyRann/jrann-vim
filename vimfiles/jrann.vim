@@ -300,7 +300,7 @@ map <F2> :bf<cr>
 map <F3> :bl<cr>
 map <F4> :b#<cr>
 " F5 for my own F5 runner script
-map <F5> :call RunF5()<cr>
+map <F5> :wall<cr>:call RunF5()<cr>
 " Shift+Tab to unindent (curious that this isn't a default)
 inoremap <S-Tab> <C-d>
 " Changes how vim writes files; in my case, webpack's file watcher failed without this, but generally the behaviour is funky.
