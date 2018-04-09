@@ -245,6 +245,27 @@ set clipboard=
 " Set airline (tabbar) theme
 let g:airline_theme='papercolor'
 
+let g:JRANN_F5_command = ''
+
+" TODO: Make this an external script
+function SetF5()
+    call inputsave()
+    let g:JRANN_F5_command = input('Enter command: ')
+    call inputrestore()
+endfunction
+
+function RunF5()
+    let command = substitute(g:JRANN_F5_command, ' ', '', '')
+    if command == ''
+        call SetF5()
+    endif
+    let command = substitute(g:JRANN_F5_command, ' ', '', '')
+    if command != ''
+        execute 'silent !' . g:JRANN_F5_command
+        execute 'redraw!'
+    endif
+endfunction
+
 " Custom mappings
 " \c to copy to clipboard. Copy whole buffer if not in visual/selection mode, otherwise copy selection
 if g:MYCONFXClipIntegration
@@ -278,6 +299,8 @@ map <F12> :bn<cr>
 map <F2> :bf<cr>
 map <F3> :bl<cr>
 map <F4> :b#<cr>
+" F5 for my own F5 runner script
+map <F5> :call RunF5()<cr>
 " Shift+Tab to unindent (curious that this isn't a default)
 inoremap <S-Tab> <C-d>
 " Changes how vim writes files; in my case, webpack's file watcher failed without this, but generally the behaviour is funky.
