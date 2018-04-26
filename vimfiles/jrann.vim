@@ -60,6 +60,7 @@ Plugin 'leafgarland/typescript-vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'moll/vim-bbye'
 Plugin 'flazz/vim-colorschemes'
+Plugin 'posva/vim-vue'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
