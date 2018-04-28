@@ -17,6 +17,8 @@
 " let g:MYCONFHomeDir = globpath("~/", "newvimhome")
 " Another option is to enable xclip integration:
 " let g:MYCONFXClipIntegration=1
+" Alternatively, you can specify a port for js-cliboard-share integration:
+" let g:MYCONFJSClipShareIntegration=3242
 " A great option for systems using Mintty or Putty or something is improved mouse support:
 " if !has("gui_running")
 "    set ttymouse=xterm2
@@ -32,6 +34,10 @@ endif
 
 if !exists("g:MYCONFXClipIntegration")
     let g:MYCONFXClipIntegration=0
+endif
+
+if !exists("g:MYCONFJSClipShareIntegration")
+    let g:MYCONFJSClipShareIntegration=0
 endif
 
 " Create directories needed for vim to function as configured
@@ -269,7 +275,10 @@ endfunction
 
 " Custom mappings
 " \c to copy to clipboard. Copy whole buffer if not in visual/selection mode, otherwise copy selection
-if g:MYCONFXClipIntegration
+if g:MYCONFJSClipShareIntegration != 0
+    nmap <leader>c :%y "<cr>:call system("curl -X POST -H \"Content-Type: text/plain\" --data-binary @- http://localhost:" . g:MYCONFJSClipShareIntegration . "/setclipboard", @")<cr><cr>
+    vmap <leader>c y:call system("curl -X POST -H \"Content-Type: text/plain\" --data-binary @- http://localhost:" . g:MYCONFJSClipShareIntegration . "/setclipboard", @")<cr><cr>
+elseif g:MYCONFXClipIntegration
     nmap <leader>c :w !xclip<cr><cr>
     vmap <leader>c y:call system("xclip", @")<cr>
 else
