@@ -67,6 +67,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'moll/vim-bbye'
 Plugin 'flazz/vim-colorschemes'
 Plugin 'posva/vim-vue'
+Plugin 'mustache/vim-mustache-handlebars'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -277,7 +278,7 @@ endfunction
 " \c to copy to clipboard. Copy whole buffer if not in visual/selection mode, otherwise copy selection
 if g:MYCONFJSClipShareIntegration != 0
     nmap <leader>c :%y "<cr>:call system("curl -X POST -H \"Content-Type: text/plain\" --data-binary @- http://localhost:" . g:MYCONFJSClipShareIntegration . "/setclipboard", @")<cr><cr>
-    vmap <leader>c y:call system("curl -X POST -H \"Content-Type: text/plain\" --data-binary @- http://localhost:" . g:MYCONFJSClipShareIntegration . "/setclipboard", @")<cr><cr>
+    vmap <leader>c ""y:call system("curl -X POST -H \"Content-Type: text/plain\" --data-binary @- http://localhost:" . g:MYCONFJSClipShareIntegration . "/setclipboard", @")<cr><cr>
 elseif g:MYCONFXClipIntegration
     nmap <leader>c :w !xclip<cr><cr>
     vmap <leader>c y:call system("xclip", @")<cr>
@@ -320,4 +321,6 @@ set backupcopy=yes
 " Unset ctrl+F as find in gvim
 map <C-F> j
 unmap <C-F>
+" Fix highlighting getting out of sync
+nmap <leader>z :syntax sync fromstart<CR>
 
