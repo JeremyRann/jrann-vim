@@ -100,12 +100,6 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" As an aside, it's possible to get full menu completion by:
-"
-" set wildmode=longest,list,full
-" set wildmenu
-" (http://stackoverflow.com/questions/526858/how-do-i-make-vim-do-normal-bash-like-tab-completion-for-file-names)
-
 :syntax on
 set number
 
@@ -243,11 +237,11 @@ set writebackup
 " Enable mouse support
 set mouse=a
 
-" OK, so this is a bit complex; personally, I want clipboard support in vim, but I only want
-" text to go into the clipboard when I specifically ask; otherwise, I want to use yank, delete,
-" etc. only within vim. By default on the console (but not in gVim), yanking goes to + and *
-" registers automatically; unset the clipboard option to prevent this, then use something like
-" "*y to copy to the clipboard
+" Better command menu completion
+set wildmenu
+set wildmode=list:full
+
+" Doesn't really disable clipboard support, just doesn't make + or * the default register
 set clipboard=
 
 " Set airline (tabbar) theme
@@ -274,6 +268,39 @@ function RunF5()
     endif
 endfunction
 
+function s:DetermineGitRepo()
+    let l:bufferPath = expand('%:p:h')
+    " (https://stackoverflow.com/a/957978/2850538)
+    let l:gitRepoPath = systemlist('git -C ' . l:bufferPath . ' rev-parse --show-toplevel')[0]
+    if v:shell_error != 0
+        echoerr v:shell_error
+        return ''
+    endif
+    return l:gitRepoPath
+endfunction
+
+function s:DetectGitFiles(ArgLead, CmdLine, CursorPos)
+    let l:gitRepoPath = s:DetermineGitRepo()
+    let l:files = systemlist('git -C ' . l:gitRepoPath . ' ls-files')
+    if (a:ArgLead !='')
+        let l:fileIndex = len(l:files)
+        while (l:fileIndex > 0)
+            let l:fileIndex = l:fileIndex - 1
+            if strridx(l:files[l:fileIndex], a:ArgLead) < 0
+                call remove(l:files, l:fileIndex)
+            endif
+        endwhile
+    endif
+    return l:files
+endfunction
+
+function s:OpenGitFile(FileName)
+    execute 'edit' globpath(s:DetermineGitRepo(), a:FileName)
+endfunction
+
+" See :help cmdline-completion for tips on command auto-complete (like ctrl+D to see all)
+command -nargs=1 -complete=customlist,s:DetectGitFiles GitOpen call s:OpenGitFile(<f-args>)
+
 " Custom mappings
 " \c to copy to clipboard. Copy whole buffer if not in visual/selection mode, otherwise copy selection
 if g:MYCONFJSClipShareIntegration != 0
@@ -296,8 +323,8 @@ map <leader>E :cd %:p:h<cr>:NERDTree<cr>
 map <leader>q :Bdelete<cr>
 " Disregard changes, close buffer, and keep split windows (don't automatically send cr to allow confirmation)
 map <leader>Q :Bdelete!
-" Map \f to "Fix .NERDTreeBookmarks (hideous hack for bug I don't feel like reporting or fixing myself)
-map <leader>f map <leader>f :%s/ \/c/ c:/g<CR>:%s/\//\\/g<CR>
+" Map \f n to "Fix .NERDTreeBookmarks (hideous hack for bug I don't feel like reporting or fixing myself)
+map <leader>fn map <leader>f :%s/ \/c/ c:/g<CR>:%s/\//\\/g<CR>
 " Disable auto-indent. There is no logical enable auto-indent since I don't know the original state.
 " With some work, you could figure it out beforehand with something like :verbose set ai? cin? cink? cino? si? inde? indk?
 " but I don't know the options very well (see http://vim.wikia.com/wiki/How_to_stop_auto_indenting)
@@ -323,4 +350,5 @@ map <C-F> j
 unmap <C-F>
 " Fix highlighting getting out of sync
 nmap <leader>z :syntax sync fromstart<CR>
+nmap <leader>ff :GitOpen 
 
