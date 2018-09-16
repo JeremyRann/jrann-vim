@@ -250,13 +250,13 @@ let g:airline_theme='papercolor'
 let g:JRANN_F5_command = ''
 
 " TODO: Make this an external script
-function SetF5()
+function SetF5() abort
     call inputsave()
     let g:JRANN_F5_command = input('Enter command: ')
     call inputrestore()
 endfunction
 
-function RunF5()
+function RunF5() abort
     let command = substitute(g:JRANN_F5_command, ' ', '', '')
     if command == ''
         call SetF5()
@@ -268,7 +268,7 @@ function RunF5()
     endif
 endfunction
 
-function s:DetermineGitRepo()
+function s:DetermineGitRepo() abort
     let l:bufferPath = expand('%:p:h')
     " (https://stackoverflow.com/a/957978/2850538)
     let l:gitRepoPath = systemlist('git -C ' . l:bufferPath . ' rev-parse --show-toplevel')[0]
@@ -279,7 +279,7 @@ function s:DetermineGitRepo()
     return l:gitRepoPath
 endfunction
 
-function s:DetectGitFiles(ArgLead, CmdLine, CursorPos)
+function s:DetectGitFiles(ArgLead, CmdLine, CursorPos) abort
     let l:gitRepoPath = s:DetermineGitRepo()
     let l:files = systemlist('git -C ' . l:gitRepoPath . ' ls-files')
     if (a:ArgLead !='')
@@ -294,12 +294,50 @@ function s:DetectGitFiles(ArgLead, CmdLine, CursorPos)
     return l:files
 endfunction
 
-function s:OpenGitFile(FileName)
+function s:OpenGitFile(FileName) abort
     execute 'edit' globpath(s:DetermineGitRepo(), a:FileName)
+endfunction
+
+function s:GitGrep_Open(Line) abort
+    if (strlen(a:Line) > 0)
+        let l:fileName = split(a:Line, ":")[0]
+        execute 'bd'
+        call s:OpenGitFile(l:fileName)
+    endif
+endfunction
+
+" Inspired by https://blog.semanticart.com/2017/01/05/lets-write-a-basic-vim-plugin/
+function s:GitGrep(SearchString) abort
+    let l:gitRepoPath = s:DetermineGitRepo()
+    let l:results = systemlist('git -C ' . l:gitRepoPath . ' grep --untracked -F -i -n ' . a:SearchString)
+    let l:splitName = '__git_grep_results__'
+
+    if bufwinnr(l:splitName) > 0
+        execute bufwinnr(l:splitName) . 'wincmd w'
+    else
+        execute 'split ' . l:splitName
+    endif
+    set modifiable
+    " Clear out existing content
+    normal! gg"_dG
+
+    " Don't prompt to save the buffer
+    set buftype=nofile
+    set bufhidden=hide
+    set noswapfile
+    set nobuflisted
+    set nowrap
+    call append(0, l:results)
+    set cul
+    normal! gg
+    :nnoremap <buffer> q :bd<cr>
+    :nnoremap <buffer> <cr> :call <SID>GitGrep_Open(getline('.'))<cr>
+    set nomodifiable
 endfunction
 
 " See :help cmdline-completion for tips on command auto-complete (like ctrl+D to see all)
 command -nargs=1 -complete=customlist,s:DetectGitFiles GitOpen call s:OpenGitFile(<f-args>)
+command -nargs=1 GitGrep call s:GitGrep(<f-args>)
 
 " Custom mappings
 " \c to copy to clipboard. Copy whole buffer if not in visual/selection mode, otherwise copy selection
@@ -351,4 +389,5 @@ unmap <C-F>
 " Fix highlighting getting out of sync
 nmap <leader>z :syntax sync fromstart<CR>
 nmap <leader>ff :GitOpen 
+nmap <leader>fi :GitGrep 
 
