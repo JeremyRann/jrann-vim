@@ -24,6 +24,12 @@
 "    set ttymouse=xterm2
 " endif
 " (TODO: figure out way to determine if that should be set dynamically)
+"
+" Note: If having clipboard trouble in Linux, consider remapping shift+insert; it normally
+" pastes from PRIMARY, but you probably want SECONDARY (PRIMARY is confusing and I generally
+" try to avoid it nowadays). Such a mapping can go in .vimrc and would look like this:
+" map! <S-Insert> <C-r>+
+
 set nocompatible              " be iMproved, required
 set nomodeline
 filetype off                  " required
